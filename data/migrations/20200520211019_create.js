@@ -4,7 +4,6 @@ exports.up = async function(knex) {
       table.increments()
       table.text("username").notNull().unique()
       table.text("password").notNull()
-      table.text("userType").defaultTo("operator")
   })
 
   await knex.schema.createTable("trucks", table => {
@@ -36,10 +35,10 @@ exports.up = async function(knex) {
   await knex.schema.createTable("ratings", table => {
     table.increments()
     table.integer("rating").notNull()
-    table.integer("menuId")
+    table.integer("truckId")
       .notNull()
       .references("id")
-      .inTable("menu-items")
+      .inTable("trucks")
       .onDelete("CASCADE")
       .onUpdate("CASCADE")
   })
@@ -61,7 +60,6 @@ exports.up = async function(knex) {
     table.text("username").notNull().unique()
     table.text("password").notNull()
     table.text("currentLocation").notNull()
-    table.text("userType").defaultTo("diner")
   })
 
   await knex.schema.createTable("diners-trucks", table => {
