@@ -59,7 +59,6 @@ exports.up = async function(knex) {
     table.increments()
     table.text("username").notNull().unique()
     table.text("password").notNull()
-    table.text("currentLocation").notNull()
   })
 
   await knex.schema.createTable("diners-trucks", table => {

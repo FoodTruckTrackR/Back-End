@@ -10,7 +10,7 @@ server.use(express.json())
 server.use(cookieParser())
 
 server.use("/operators", operatorsRouter)
-// server.use("/diners", dinersRouter)
+server.use("/diners", dinersRouter)
 
 server.use((err, req, res, next) => {
     console.log(err)
