@@ -14,7 +14,7 @@ server.use("/diners", dinersRouter)
 
 server.get("/", (req, res) => {
     res.status(200).json({
-        message: process.env.SECRET_MESSAGE || "Welcome"
+        message: process.env.SECRET_MESSAGE || "Welcome to your app"
     })
 })
 
