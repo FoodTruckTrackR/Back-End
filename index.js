@@ -12,6 +12,11 @@ server.use(cookieParser())
 server.use("/operators", operatorsRouter)
 server.use("/diners", dinersRouter)
 
+server.get("/", (req, res) => {
+    res.status(200).json({
+        message: process.env.SECRET_MESSAGE || "Welcome"
+    })
+})
 
 server.use((err, req, res, next) => {
     console.log(err)
