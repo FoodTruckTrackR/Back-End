@@ -5,7 +5,7 @@ const dinersRouter = require("./diner/dinersRouter")
 
 const server = express()
 
-const port = 5050 || process.env.PORT
+const port = process.env.PORT || 5050
 server.use(express.json())
 server.use(cookieParser())
 
