@@ -12,6 +12,7 @@ server.use(cookieParser())
 server.use("/operators", operatorsRouter)
 server.use("/diners", dinersRouter)
 
+
 server.use((err, req, res, next) => {
     console.log(err)
     res.status(500).json({
