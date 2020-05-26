@@ -1,5 +1,7 @@
 const express = require("express")
 const cookieParser = require("cookie-parser")
+const cors = require("cors")
+
 const operatorsRouter = require("./operator/operatorsRouter")
 const dinersRouter = require("./diner/dinersRouter")
 const trucksRouter = require("./truck/trucksRouter")
@@ -7,6 +9,7 @@ const trucksRouter = require("./truck/trucksRouter")
 const server = express()
 
 const port = process.env.PORT || 5050
+server.use(cors())
 server.use(express.json())
 server.use(cookieParser())
 

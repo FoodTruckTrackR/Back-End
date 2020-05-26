@@ -9,7 +9,7 @@ router.post("/", validateTruckData(), async (req, res, next) => {
         const truck = {
             cuisineType: req.body.cuisineType,
             imageOfTruck: req.body.imageOfTruck,
-            operatorId: req.params.id
+            operatorId: req.params.operator_id
         }
         const newTruck = await Trucks.add(truck)
         res.status(201).json(newTruck)
