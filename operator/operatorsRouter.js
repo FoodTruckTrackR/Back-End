@@ -2,9 +2,12 @@ const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const Operators = require("./operatorsModel")
+const trucksRouter = require("../truck/trucksRouter")
 
 
 const router = express.Router()
+
+router.use("/:operator_id/trucks", trucksRouter)
 
 router.post("/register", async (req, res, next) => {
     try {
@@ -56,7 +59,7 @@ router.get("/", async (req, res, next) => {
         next(err)
     }
 })
-router.get("/:id", validateOperator(), async (req, res, next) => {
+router.get("/:operator_id", validateOperator(), async (req, res, next) => {
     try {
         res.json(req.operator)
     } catch(err) {
@@ -64,18 +67,18 @@ router.get("/:id", validateOperator(), async (req, res, next) => {
     }
 })
 
-router.put("/:id", validateOperator(), async (req, res, next) => {
+router.put("/:operator_id", validateOperator(), async (req, res, next) => {
     try {
-        const operator = await Operators.update(req.body, req.params.id)
+        const operator = await Operators.update(req.body, req.params.operator_id)
         res.json(operator)
     } catch(err) {
         next(err)
     }
 })
 
-router.delete("/:id", validateOperator(), async (req, res, next) => {
+router.delete("/:operator_id", validateOperator(), async (req, res, next) => {
     try {
-        await Operators.remove(req.params.id)
+        await Operators.remove(req.params.operator_id)
         res.status(204).end()
     } catch(err) {
         next(err)
@@ -85,7 +88,7 @@ router.delete("/:id", validateOperator(), async (req, res, next) => {
 function validateOperator() {
     return async (req, res, next) => {
         try {
-            const operator = await Operators.findById(req.params.id)
+            const operator = await Operators.findById(req.params.operator_id)
             if (!operator) {
                 return res.status(404).json({
                     message: "User not found"

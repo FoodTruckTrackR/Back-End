@@ -2,6 +2,7 @@ const express = require("express")
 const cookieParser = require("cookie-parser")
 const operatorsRouter = require("./operator/operatorsRouter")
 const dinersRouter = require("./diner/dinersRouter")
+const trucksRouter = require("./truck/trucksRouter")
 
 const server = express()
 
@@ -11,6 +12,7 @@ server.use(cookieParser())
 
 server.use("/operators", operatorsRouter)
 server.use("/diners", dinersRouter)
+server.use("/trucks", trucksRouter)
 
 server.get("/", (req, res) => {
     res.status(200).json({
