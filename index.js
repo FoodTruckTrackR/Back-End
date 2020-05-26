@@ -19,7 +19,7 @@ server.use("/trucks", trucksRouter)
 
 server.get("/", (req, res) => {
     res.status(200).json({
-        message: "Welcome to your new app"
+        message: "Welcome to your brand new app"
     })
 })
 
