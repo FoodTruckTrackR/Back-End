@@ -15,7 +15,19 @@ async function findById(id){
         .where({id})
         .select("id", "username")
         .first()
-    operator.trucks = await db("trucks").where("operatorId", id)
+    const trucks = await db("trucks").where("operatorId", id).select("id", "imageOfTruck", "cuisineType")
+    operator.trucks = await Promise.all(trucks.map(async truck => {
+        const truckRatings = await db("ratings").where("truckId", truck.id).select("rating")
+        const menuItems = await db("menu-items").where("truckId", truck.id).select("id", "itemName", "itemDescription", "itemPrice", "itemPhoto")
+        const ratings = truckRatings.map(rating => rating.rating)
+        const ratingAvg = (ratings.reduce((a, b) => a + b, 0))/ratings.length
+        return {
+            ...truck,
+            menuItems: menuItems,
+            ratings: ratings,
+            ratingAvg: ratingAvg
+        }
+    }))
     return operator
 }
 

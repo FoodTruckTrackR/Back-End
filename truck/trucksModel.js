@@ -18,7 +18,7 @@ async function find() {
             ratingAvg: ratingAvg
         }
     }))
-    return newTrucks
+    return trucks
 }
 
 function findBy(filter) {
