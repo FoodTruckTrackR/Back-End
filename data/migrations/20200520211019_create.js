@@ -24,7 +24,6 @@ exports.up = async function(knex) {
     table.text("itemPhoto").notNull()
     table.float("itemPrice").notNull()
     table.integer("truckId")
-      .notNull()
       .references("id")
       .inTable("trucks")
       .onDelete("CASCADE")
