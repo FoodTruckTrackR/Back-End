@@ -1,14 +1,38 @@
 const db = require("../data/config")
 
-function find() {
+function find(){
     return db("trucks")
+}
+
+async function find() {
+    const trucks = await db("trucks")
+    const newTrucks = await Promise.all(trucks.map(async truck => {
+        const truckRatings = await db("ratings").where("truckId", truck.id).select("rating")
+        const menuItems = await db("menu-items").where("truckId", truck.id).select("id", "itemName", "itemDescription", "itemPrice", "itemPhoto")
+        const ratings = truckRatings.map(rating => rating.rating)
+        const ratingAvg = (ratings.reduce((a, b) => a + b, 0))/ratings.length
+        return {
+            ...truck,
+            menuItems: menuItems,
+            ratings: ratings,
+            ratingAvg: ratingAvg
+        }
+    }))
+    return newTrucks
 }
 
 function findBy(filter) {
     return db("trucks").where(filter).first()
 }
 
-
+async function findById(id) {
+    const truck = await db("trucks").where("id", id).first()
+    truck.menuItems = await db("menu-items").where("truckId", id).select("id", "itemName", "itemDescription", "itemPrice", "itemPhoto")
+    const ratings = await db("ratings").where("truckId", id).select("rating")
+    truck.ratings = ratings.map(rating => rating.rating)
+    truck.ratingAvg = (truck.ratings.reduce((a, b) => a + b, 0))/truck.ratings.length
+    return truck
+}
 
 function findByOperatorId(id) {
     return db("trucks").where("operatorId", id)
@@ -31,6 +55,7 @@ function remove(id){
 module.exports = {
     find,
     findBy,
+    findById,
     findByOperatorId,
     add,
     update,

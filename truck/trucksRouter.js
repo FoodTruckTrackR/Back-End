@@ -44,7 +44,7 @@ router.get("/",  async (req, res, next) => {
 
 router.get("/:truck_id", validateTruck(), async (req, res, next) => {
     const id = req.params.truck_id
-    const truck = await Trucks.findBy({id})
+    const truck = await Trucks.findById(id)
     if (req.params.operator_id) {
         const operator = await Operators.findById(req.params.operator_id)
         if (!operator) {
@@ -58,7 +58,7 @@ router.get("/:truck_id", validateTruck(), async (req, res, next) => {
         }
         res.json(truck)
     } else {
-        res.json(await Trucks.findBy({id}))
+        res.json(truck)
     }
 })
 

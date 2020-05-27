@@ -10,11 +10,13 @@ function findBy(filter){
         .first()
 }
 
-function findById(id){
-    return db("operators")
+async function findById(id){
+    const operator = await db("operators")
         .where({id})
         .select("id", "username")
         .first()
+    operator.trucks = await db("trucks").where("operatorId", id)
+    return operator
 }
 
 async function add(data) {

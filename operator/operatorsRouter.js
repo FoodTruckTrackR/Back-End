@@ -46,8 +46,8 @@ router.post("/login", async (req, res, next) => {
             operatorName: user.username
         }
         res.json({
-            message: `Welcome ${user1.username}`,
-            token: jwt.sign(tokenPayload, process.env.JWT_SECRET)
+            ...user1,
+            token: jwt.sign(tokenPayload, process.env.JWT_SECRET),
         })
     } catch (err){
         next(err)
