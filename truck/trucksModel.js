@@ -18,7 +18,7 @@ async function find() {
             ratingAvg: ratingAvg
         }
     }))
-    return trucks
+    return newTrucks
 }
 
 function findBy(filter) {
@@ -34,8 +34,21 @@ async function findById(id) {
     return truck
 }
 
-function findByOperatorId(id) {
-    return db("trucks").where("operatorId", id)
+async function findByOperatorId(id) {
+    const trucks = await db("trucks").where("operatorId", id).select("id", "imageOfTruck", "cuisineType")
+    const newTrucks = await Promise.all(trucks.map(async truck => {
+        const truckRatings = await db("ratings").where("truckId", truck.id).select("rating")
+        const menuItems = await db("menu-items").where("truckId", truck.id).select("id", "itemName", "itemDescription", "itemPrice", "itemPhoto")
+        const ratings = truckRatings.map(rating => rating.rating)
+        const ratingAvg = (ratings.reduce((a, b) => a + b, 0))/ratings.length
+        return {
+            ...truck,
+            menuItems: menuItems,
+            ratings: ratings,
+            ratingAvg: ratingAvg
+        }
+    }))
+    return newTrucks
 }
 
 async function add(data) {
