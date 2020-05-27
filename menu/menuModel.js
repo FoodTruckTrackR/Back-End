@@ -1,5 +1,8 @@
 const db = require("../data/config")
 
+function find(){
+    return db("menu-items")
+}
 function findById(id) {
     return db("menu-items").where("id", id).first()
 }
@@ -19,7 +22,7 @@ function remove(id) {
 }
 
 module.exports = {
-
+    find,
     findById,
     add,
     update,

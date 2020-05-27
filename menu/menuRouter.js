@@ -22,6 +22,38 @@ router.post("/", validateMenuData(), validateOperator(), validateTruck(), valida
     }
 })
 
+router.get("/", async (req, res, next) => {
+    try {
+        res.json(await Menu.find())
+    } catch(err) {
+        next(err)
+    }
+})
+
+router.put("/:menu_id", validateMenuData(), validateMenuItem(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
+    try {
+        const updatedItem = {
+            itemName: req.body.itemName,
+            itemDescription: req.body.itemDescription,
+            itemPhoto: req.body.itemPhoto,
+            itemPrice: req.body.itemPrice
+        }
+        const newItem = await Menu.update(updatedItem, req.params.menu_id)
+        res.json(newItem)
+    } catch(err) {
+        next(err)
+    }
+})
+
+router.delete("/:menu_id", validateMenuItem(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
+    try {
+        await Menu.remove(req.params.menu_id)
+        res.status(204).end()
+    } catch(errr) {
+        next(err)
+    }
+})
+
 
 function validateOperator() {
     return async (req, res, next) => {
@@ -69,7 +101,7 @@ function validateMenuItem() {
     return async (req, res, next) => {
         const menuItem = await Menu.findById(req.params.menu_id)
         if (!menuItem) {
-            res.status(404).json({
+            return res.status(404).json({
                 message: "Menu item not found"
             })
         }
