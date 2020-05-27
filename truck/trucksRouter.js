@@ -1,8 +1,11 @@
 const express = require("express")
 const Trucks = require("./trucksModel")
 const Operators = require("../operator/operatorsModel")
+const menuRouter = require("../menu/menuRouter")
 
 const router = express.Router({mergeParams: true})
+
+router.use("/:truck_id/menu-items", menuRouter)
 
 router.post("/", validateTruckData(), async (req, res, next) => {
     try {

@@ -3,6 +3,26 @@ const Operators = require("../operator/operatorsModel")
 const Trucks = require("../truck/trucksModel")
 const Menu = require("../menu/menuModel")
 
+const router = express.Router({
+    mergeParams: true
+})
+
+router.post("/", validateMenuData(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
+    try {
+        const menuItem = {
+            itemName: req.body.itemName,
+            itemDescription: req.body.itemDescription,
+            itemPhoto: req.body.itemPhoto,
+            itemPrice: req.body.itemPrice,
+            truckId: req.params.truck_id
+        }
+        res.status(201).json(await Menu.add(menuItem))
+    } catch(err) {
+        next(err)
+    }
+})
+
+
 function validateOperator() {
     return async (req, res, next) => {
         const operator = await Operators.findById(req.params.operator_id)
@@ -30,6 +50,21 @@ function validateTruck() {
     }
 }
 
+function validateOwnership() {
+    return async (req, res, next) => {
+        const operator = await Operators.findById(req.params.operator_id)
+        const id = req.params.truck_id
+        const truck = await Trucks.findBy({id})
+        if (truck.operatorId !== operator.id) {
+            return res.status(401).json({
+                message: "You are not authorized to change the menu"
+            })
+        }
+
+        next()
+    }
+}
+
 function validateMenuItem() {
     return async (req, res, next) => {
         const menuItem = await Menu.findById(req.params.menu_id)
@@ -45,6 +80,15 @@ function validateMenuItem() {
 
 function validateMenuData() {
     return (req, res, next) => {
-        
+        const {itemName, itemDescription, itemPhoto, itemPrice } = req.body
+        if (!itemName || !itemDescription || !itemPhoto || !itemPrice) {
+            return res.status(400).json({
+                message: "Please complete all fields"
+            })
+        }
+
+        next()
     }
 }
+
+module.exports = router

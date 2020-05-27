@@ -18,9 +18,10 @@ function remove(id) {
     return db("menu-items").where({id}).del()
 }
 
-module.exports = [
+module.exports = {
+
     findById,
     add,
     update,
     remove
-]
+}
