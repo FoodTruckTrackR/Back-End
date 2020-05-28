@@ -1,12 +1,13 @@
 const express = require("express")
 const Rating = require("./ratingsModel")
 const Trucks = require("../truck/trucksModel")
+const {restrictAccess} = require("../middleware/restrict")
 
 const router = express.Router({
     mergeParams: true
 })
 
-router.post("/", validateRatingData(), validateTruck(), async (req, res, next) => {
+router.post("/", validateRatingData(), restrictAccess("diner"), validateTruck(), async (req, res, next) => {
     try{
         const rating = {
             rating: req.body.rating,
@@ -18,7 +19,7 @@ router.post("/", validateRatingData(), validateTruck(), async (req, res, next) =
     }
 })
 
-router.put("/:rating_id", validateRatingData(), validateTruck(), validateRating(), async (req, res, next) => {
+router.put("/:rating_id", validateRatingData(), restrictAccess("diner"), validateTruck(), validateRating(), async (req, res, next) => {
     try {
         const rating = {
             rating: req.body.rating,
@@ -31,7 +32,7 @@ router.put("/:rating_id", validateRatingData(), validateTruck(), validateRating(
     }
 })
 
-router.delete("/:rating_id", validateTruck(), validateRating(), async (req, res, next) => {
+router.delete("/:rating_id", restrictAccess("diner"), validateTruck(), validateRating(), async (req, res, next) => {
     try{
         await Rating.remove(req.params.rating_id)
         res.status(204).end()

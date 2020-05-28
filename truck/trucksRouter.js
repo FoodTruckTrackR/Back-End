@@ -3,13 +3,14 @@ const Trucks = require("./trucksModel")
 const Operators = require("../operator/operatorsModel")
 const menuRouter = require("../menu/menuRouter")
 const ratingsRouter = require("../rating/ratingsRouter")
+const {restrict, restrictAccess} = require("../middleware/restrict")
 
 const router = express.Router({mergeParams: true})
 
 router.use("/:truck_id/menu-items", menuRouter)
 router.use("/:truck_id/ratings", ratingsRouter)
 
-router.post("/", validateTruckData(), async (req, res, next) => {
+router.post("/", validateTruckData(), restrictAccess("operator"), async (req, res, next) => {
     try {
         const truck = {
             truckName: req.body.truckName,
@@ -24,7 +25,7 @@ router.post("/", validateTruckData(), async (req, res, next) => {
     }
 })
 
-router.get("/",  async (req, res, next) => {
+router.get("/", restrict(), async (req, res, next) => {
     try {
         if (req.params.operator_id) {
             const operator = await Operators.findById(req.params.operator_id)
@@ -43,7 +44,7 @@ router.get("/",  async (req, res, next) => {
     }
 })
 
-router.get("/:truck_id", validateTruck(), async (req, res, next) => {
+router.get("/:truck_id", restrict(), validateTruck(), async (req, res, next) => {
     const id = req.params.truck_id
     const truck = await Trucks.findById(id)
     if (req.params.operator_id) {
@@ -63,7 +64,7 @@ router.get("/:truck_id", validateTruck(), async (req, res, next) => {
     }
 })
 
-router.put("/:truck_id", validateTruck(), validateTruckOwnership(), async (req, res, next) => {
+router.put("/:truck_id", restrictAccess("operator"), validateTruck(), validateTruckOwnership(), async (req, res, next) => {
     try {
         const updatedTruck = await Trucks.update(req.body, req.params.truck_id)
         res.json(updatedTruck)
@@ -72,7 +73,7 @@ router.put("/:truck_id", validateTruck(), validateTruckOwnership(), async (req, 
     }
 })
 
-router.delete("/:truck_id", validateTruck(), validateTruckOwnership(), async (req, res, next) => {
+router.delete("/:truck_id", restrictAccess("operator"), validateTruck(), validateTruckOwnership(), async (req, res, next) => {
     try {
         await Trucks.remove(req.params.truck_id)
         res.status(204).end()

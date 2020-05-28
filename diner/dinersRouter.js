@@ -2,6 +2,7 @@ const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const Diners = require("./dinersModel")
+const { restrictAccess, restrict } = require("../middleware/restrict")
 
 
 const router = express.Router()
@@ -52,14 +53,14 @@ router.post("/login", async (req, res, next) => {
     }
 })
 
-router.get("/", async (req, res, next) => {
+router.get("/", restrict(), async (req, res, next) => {
     try {
         res.json(await Diners.find())
     } catch(err) {
         next(err)
     }
 })
-router.get("/:id", validateDiner(), async (req, res, next) => {
+router.get("/:id", restrict(), validateDiner(), async (req, res, next) => {
     try {
         res.json(req.diner)
     } catch(err) {
@@ -67,7 +68,7 @@ router.get("/:id", validateDiner(), async (req, res, next) => {
     }
 })
 
-router.put("/:id", validateDiner(), async (req, res, next) => {
+router.put("/:id", restrictAccess("diner"), validateDiner(), async (req, res, next) => {
     try {
         const diner = await Diners.update(req.body, req.params.id)
         res.json(diner)
@@ -76,7 +77,7 @@ router.put("/:id", validateDiner(), async (req, res, next) => {
     }
 })
 
-router.delete("/:id", validateDiner(), async (req, res, next) => {
+router.delete("/:id", restrictAccess("diner"), validateDiner(), async (req, res, next) => {
     try {
         await Diners.remove(req.params.id)
         res.status(204).end()

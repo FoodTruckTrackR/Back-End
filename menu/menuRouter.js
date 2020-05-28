@@ -2,12 +2,13 @@ const express = require("express")
 const Operators = require("../operator/operatorsModel")
 const Trucks = require("../truck/trucksModel")
 const Menu = require("../menu/menuModel")
+const { restrictAccess, restrict } = require("../middleware/restrict")
 
 const router = express.Router({
     mergeParams: true
 })
 
-router.post("/", validateMenuData(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
+router.post("/", validateMenuData(), restrictAccess("operator"), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
     try {
         const menuItem = {
             itemName: req.body.itemName,
@@ -22,7 +23,7 @@ router.post("/", validateMenuData(), validateOperator(), validateTruck(), valida
     }
 })
 
-router.get("/", async (req, res, next) => {
+router.get("/", restrict(), async (req, res, next) => {
     try {
         res.json(await Menu.find())
     } catch(err) {
@@ -30,7 +31,7 @@ router.get("/", async (req, res, next) => {
     }
 })
 
-router.put("/:menu_id", validateMenuData(), validateMenuItem(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
+router.put("/:menu_id", validateMenuData(), restrictAccess("operator"), validateMenuItem(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
     try {
         const updatedItem = {
             itemName: req.body.itemName,
@@ -45,7 +46,7 @@ router.put("/:menu_id", validateMenuData(), validateMenuItem(), validateOperator
     }
 })
 
-router.delete("/:menu_id", validateMenuItem(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
+router.delete("/:menu_id", restrictAccess("operator"), validateMenuItem(), validateOperator(), validateTruck(), validateOwnership(), async (req, res, next) => {
     try {
         await Menu.remove(req.params.menu_id)
         res.status(204).end()
