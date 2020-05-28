@@ -8,6 +8,7 @@ exports.up = async function(knex) {
 
   await knex.schema.createTable("trucks", table => {
       table.increments()
+      table.text("truckName").notNull()
       table.text("imageOfTruck").notNull()
       table.text("cuisineType")
       table.integer("operatorId")

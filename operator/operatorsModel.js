@@ -15,7 +15,7 @@ async function findById(id){
         .where({id})
         .select("id", "username")
         .first()
-    const trucks = await db("trucks").where("operatorId", id).select("id", "imageOfTruck", "cuisineType")
+    const trucks = await db("trucks").where("operatorId", id).select("id", "truckName", "imageOfTruck", "cuisineType")
     operator.trucks = await Promise.all(trucks.map(async truck => {
         const truckRatings = await db("ratings").where("truckId", truck.id).select("rating")
         const menuItems = await db("menu-items").where("truckId", truck.id).select("id", "itemName", "itemDescription", "itemPrice", "itemPhoto")

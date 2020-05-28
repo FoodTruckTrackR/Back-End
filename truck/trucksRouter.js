@@ -82,8 +82,8 @@ router.delete("/:truck_id", validateTruck(), validateTruckOwnership(), async (re
 
 function validateTruckData() {
     return (req, res, next) => {
-        const { imageOfTruck, cuisineType } = req.body
-        if (!imageOfTruck || !cuisineType) {
+        const { truckName, imageOfTruck, cuisineType } = req.body
+        if (!truckName || !imageOfTruck || !cuisineType) {
             return res.status(404).json({
                 message: "Please complete all fields"
             })

@@ -46,6 +46,7 @@ POST - /operators/login
   "trucks": [
     {
       "id": 7,
+      "truckName": "Woo Chon"
       "imageOfTruck": "sample-url7",
       "cuisineType": "Korean",
       "menuItems": [
@@ -95,6 +96,7 @@ Returns updated operator object
   "trucks": [
     {
       "id": 7,
+      "truckName": "Woo Chon",
       "imageOfTruck": "sample-url7",
       "cuisineType": "Korean",
       "menuItems": [
@@ -135,6 +137,7 @@ POST - /operators/:operator_id/trucks
 
 | Fields        | Type   | Required |
 | ------------- | ------ | -------- | 
+| truckName     | string | Yes      |
 | imageOfTruck  | string | Yes      | 
 | cuisineType   | string | Yes      |
 
@@ -158,6 +161,7 @@ GET - /operators/:operator_id/trucks
 [
   {
     "id": 1,
+    "truckName": "Tina's",
     "imageOfTruck": "sample-url1",
     "cuisineType": "Italian",
     "menuItems": [
@@ -185,6 +189,7 @@ GET - /operators/:operator_id/trucks
   },
   {
     "id": 2,
+    "truckName": "Gyros",
     "imageOfTruck": "sample-url2",
     "cuisineType": "Mediterranean",
     "menuItems": [
@@ -219,6 +224,7 @@ UPDATE - /operators/:operator_id/trucks/truck_id
 
 | Fields        | Type   | Required |
 | ------------- | ------ | -------- | 
+| truckName     | string | Yes      |
 | imageOfTruck  | string | Yes      | 
 | cuisineType   | string | Yes      |
 
@@ -227,6 +233,7 @@ UPDATE - /operators/:operator_id/trucks/truck_id
 ```
 {
   "id": 7,
+  "truckName": "Woo Chon",
   "imageOfTruck": "sample-url7",
   "cuisineType": "Korean",
   "operatorId": 4
@@ -361,6 +368,7 @@ GET - /trucks
 [
   {
     "id": 1,
+    "truckName": "Tina's",
     "imageOfTruck": "sample-url1",
     "cuisineType": "Italian",
     "operatorId": 1,
@@ -389,6 +397,7 @@ GET - /trucks
   },
   {
     "id": 2,
+    "truckName": "Gyros",
     "imageOfTruck": "sample-url2",
     "cuisineType": "Mediterranean",
     "operatorId": 1,
@@ -417,6 +426,7 @@ GET - /trucks
   },
   {
     "id": 3,
+    "truckName": "Salsarita's",
     "imageOfTruck": "sample-url3",
     "cuisineType": "Mexican",
     "operatorId": 2,
@@ -453,6 +463,7 @@ GET - /trucks/:truck_id
 ```
 {
   "id": 2,
+  "truckName": "Gyros",
   "imageOfTruck": "sample-url2",
   "cuisineType": "Mediterranean",
   "operatorId": 1,
