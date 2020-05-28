@@ -12,6 +12,7 @@ router.use("/:truck_id/ratings", ratingsRouter)
 router.post("/", validateTruckData(), async (req, res, next) => {
     try {
         const truck = {
+            truckName: req.body.truckName,
             cuisineType: req.body.cuisineType,
             imageOfTruck: req.body.imageOfTruck,
             operatorId: req.params.operator_id
