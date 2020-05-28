@@ -40,7 +40,8 @@ router.post("/login", async (req, res, next) => {
         const user1 = await Diners.findById(user.id)
         const tokenPayload = {
             dinerId: user.id,
-            dinerName: user.username
+            dinerName: user.username,
+            access: "diner"
         }
         res.json({
             message: `Welcome ${user1.username}`,

@@ -3,11 +3,12 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const Operators = require("./operatorsModel")
 const trucksRouter = require("../truck/trucksRouter")
+const { restrictAccess } = require("../middleware/restrict")
 
 
 const router = express.Router()
 
-router.use("/:operator_id/trucks", trucksRouter)
+router.use("/:operator_id/trucks", restrictAccess("operator"), trucksRouter)
 
 router.post("/register", async (req, res, next) => {
     try {
@@ -43,7 +44,8 @@ router.post("/login", async (req, res, next) => {
         const user1 = await Operators.findById(user.id)
         const tokenPayload = {
             operatorId: user.id,
-            operatorName: user.username
+            operatorName: user.username,
+            access: "operator"
         }
         res.json({
             ...user1,
@@ -69,7 +71,7 @@ router.get("/:operator_id", validateOperator(), async (req, res, next) => {
     }
 })
 
-router.put("/:operator_id", validateOperator(), async (req, res, next) => {
+router.put("/:operator_id", restrictAccess("operator"), validateOperator(), async (req, res, next) => {
     try {
         const operator = await Operators.update(req.body, req.params.operator_id)
         res.json(operator)
@@ -78,7 +80,7 @@ router.put("/:operator_id", validateOperator(), async (req, res, next) => {
     }
 })
 
-router.delete("/:operator_id", validateOperator(), async (req, res, next) => {
+router.delete("/:operator_id", restrictAccess("operator"), validateOperator(), async (req, res, next) => {
     try {
         await Operators.remove(req.params.operator_id)
         res.status(204).end()
