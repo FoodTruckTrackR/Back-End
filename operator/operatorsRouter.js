@@ -3,12 +3,12 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const Operators = require("./operatorsModel")
 const trucksRouter = require("../truck/trucksRouter")
-const { restrictAccess } = require("../middleware/restrict")
+const { restrictAccess, restrict } = require("../middleware/restrict")
 
 
 const router = express.Router()
 
-router.use("/:operator_id/trucks", restrictAccess("operator"), trucksRouter)
+router.use("/:operator_id/trucks", trucksRouter)
 
 router.post("/register", async (req, res, next) => {
     try {
