@@ -43,6 +43,7 @@ function restrict() {
                 return res.status(401).json(authError)
             }
             req.token = decodedPayload
+            next()
         })
         } catch(err) {
             next(err)
