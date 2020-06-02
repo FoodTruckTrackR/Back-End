@@ -1,8 +1,5 @@
 const db = require("../data/config")
 
-function find(){
-    return db("trucks")
-}
 
 async function find() {
     const trucks = await db("trucks")

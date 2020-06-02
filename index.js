@@ -32,6 +32,10 @@ server.use((err, req, res, next) => {
     })
 })
 
-server.listen(port, () => {
-    console.log(`Server is listening on port ${port}`)
-})
+if (!module.parent) {
+    server.listen(port, () => {
+        console.log(`Server is listening on port ${port}`)
+    })
+}
+
+module.exports = server

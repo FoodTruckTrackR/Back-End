@@ -14,13 +14,13 @@ router.post("/register", async (req, res, next) => {
     try {
         const { username, password } = req.body
         if (!username || !password) {
-            res.status(404).json({
+            return res.status(404).json({
                 message: "Please enter valid username and password"
             })
         }
         const user = await Operators.findBy({username})
         if (user) {
-            res.status(409).json({
+            return res.status(409).json({
                 message: "Username is already taken. Please select another"
             })
         }
@@ -37,7 +37,7 @@ router.post("/login", async (req, res, next) => {
         const user = await Operators.findBy({username})
         const validPassword = await bcrypt.compare(password, user.password)
         if (!user || !validPassword) {
-            res.status(401).json({
+            return res.status(401).json({
                 message: "Invalid Credentials"
             })
         }
