@@ -56,7 +56,7 @@ router.post("/login", async (req, res, next) => {
     }
 })
 
-router.get("/", restrict(), async (req, res, next) => {
+router.get("/", async (req, res, next) => {
     try {
         res.json(await Operators.find())
     } catch(err) {
