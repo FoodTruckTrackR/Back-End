@@ -33,7 +33,7 @@ async function findById(id){
 
 async function add(data) {
     data.password = await bcrypt.hash(data.password, 13)
-    const [id] = await db("operators").insert(data)
+    const [id] = await db("operators").insert(data).returning("id")
     return findById(id)
     
 }

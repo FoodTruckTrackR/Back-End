@@ -49,7 +49,7 @@ async function findByOperatorId(id) {
 }
 
 async function add(data) {
-    const [id] = await db("trucks").insert(data)
+    const [id] = await db("trucks").insert(data).returning("id")
     return findBy({id})
 }
 
