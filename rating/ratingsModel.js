@@ -5,7 +5,7 @@ function findById(id) {
 }
 
 async function add(data){
-    const [id] = await db("ratings").insert(data)
+    const [id] = await db("ratings").insert(data).returning("id")
     return findById(id)
 }
 
